@@ -1,0 +1,31 @@
+{
+  "name": "@no-throw/core",
+  "version": "0.0.1",
+  "description": "Stop throwing (and not catching) errors",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "CHANGELOG.md",
+    "README.md"
+  ],
+  "exports": {
+    ".": {
+      "require": "./dist/index.cjs",
+      "import": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "dev": "tsup src/index.ts --format cjs,esm --dts --sourcemap --watch --clean",
+    "build": "tsup src/index.ts --format cjs,esm --dts --clean",
+    "lint": "eslint src/**",
+    "test": "vitest",
+    "check-types": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "tsconfig": "workspace:*",
+    "tsup": "^6.2.2"
+  },
+  "dependencies": {}
+}
