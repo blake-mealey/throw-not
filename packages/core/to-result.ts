@@ -1,43 +1,50 @@
 import { Panic } from './panic';
 import { Err, Ok, Result } from './result';
+import { Value } from './value';
 
-export function toResult<TValue, TError = unknown>(
-  op: () => TValue,
+export function toResult<
+  TOp extends Promise<Value> | (() => Promise<Value>) | (() => Value),
+  TValue extends TOp extends Promise<infer V1>
+    ? V1
+    : TOp extends () => Promise<infer V2>
+    ? V2
+    : TOp extends () => infer V3
+    ? V3
+    : never,
+  TError extends Value,
+>(
+  op: TOp,
   mapErr?: (error: any) => TError,
-): Result<TValue, TError> {
+): TOp extends Promise<TValue>
+  ? Promise<Result<TValue, TError>>
+  : TOp extends () => Promise<TValue>
+  ? Promise<Result<TValue, TError>>
+  : Result<TValue, TError> {
   try {
-    return Ok(op());
+    if (typeof op === 'function') {
+      const value = op();
+      if (value instanceof Promise) {
+        return toResult(value, mapErr) as any;
+      }
+      return Ok<TValue, TError>(value as TValue) as any;
+    } else {
+      return op
+        .then((value) => Ok(value))
+        .catch((error) => {
+          if (error instanceof Panic) {
+            return Promise.reject(error);
+          }
+          return mapErr !== undefined ? Err(mapErr(error)) : Err(error);
+        }) as any;
+    }
   } catch (error) {
-    // Panics should never be caught
     if (error instanceof Panic) {
       throw error;
     }
-
-    if (mapErr) {
-      return Err(mapErr(error));
-    }
-    return Err(error);
+    return (mapErr !== undefined ? Err(mapErr(error)) : Err(error)) as any;
   }
 }
 
-export async function toResultAsync<TValue, TError = unknown>(
-  op: () => Promise<TValue>,
-  mapErr?: (error: any) => TError,
-): Promise<Result<TValue, TError>> {
-  try {
-    return Ok(await op());
-  } catch (error) {
-    // Panics should never be caught
-    if (error instanceof Panic) {
-      throw error;
-    }
-
-    if (mapErr) {
-      return Err(mapErr(error));
-    }
-    return Err(error);
-  }
-}
 export function mapError(error: any) {
   if (error instanceof Error) {
     return error;

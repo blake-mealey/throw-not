@@ -27,5 +27,7 @@
     "tsconfig": "workspace:*",
     "tsup": "^6.2.2"
   },
-  "dependencies": {}
+  "dependencies": {
+    "type-fest": "^2.19.0"
+  }
 }
