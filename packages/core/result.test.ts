@@ -1,4 +1,5 @@
 import { expect, test } from 'vitest';
+import { createEnum, t } from './enum';
 import { Ok, Err, Void } from './index';
 
 test('ok should be ok', () => {
@@ -12,3 +13,12 @@ test('err should be err', () => {
   expect(r.isOk()).toBe(false);
   expect(r.isErr()).toBe(true);
 });
+
+createEnum(
+  'Result',
+  {
+    Ok: t.any,
+    Err: t.any,
+  },
+  {},
+);

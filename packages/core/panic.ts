@@ -9,3 +9,7 @@ export function panic(message?: string): never {
 export function unreachable() {
   return panic('unreachable code');
 }
+
+export function unimplemented() {
+  return panic('unimplemented');
+}
