@@ -1,201 +1,103 @@
-import { None, Some } from './option';
 import { panic, unreachable } from './panic';
 import { Value } from './value';
 
-export class Result<
-  TValue extends Value = unknown,
-  TError extends Value = unknown,
-> {
-  constructor(
-    private _value: TValue | undefined,
-    private _error: TError | undefined,
-  ) {
-    if (_value !== undefined && _error !== undefined) {
-      return panic('Result cannot be both Ok and Err');
-    }
+// export interface OkResult<TValue extends Value> {
+//   ok(): true;
+//   err(): false;
+//   get(): TValue;
+// }
+// export interface ErrResult<TError extends Value> {
+//   ok(): false;
+//   err(): true;
+//   getErr(): TError;
+// }
 
-    if (_value === undefined && _error === undefined) {
-      return panic('Result must be one of Ok or Err');
-    }
+// export class Result<TValue extends Value, TError extends Value> {
+//   constructor(
+//     protected _value: TValue | undefined,
+//     protected _error: TError | undefined,
+//   ) {
+//     if (_value === undefined && _error === undefined) {
+//       return panic('Result must be either ok or err');
+//     }
+//     if (_value !== undefined && _error !== undefined) {
+//       return panic('Result cannot be both ok and err');
+//     }
+//   }
+
+//   ok(): this is OkResult<TValue> {
+//     return this._value !== undefined;
+//   }
+
+//   err(): this is ErrResult<TError> {
+//     return this._error !== undefined;
+//   }
+
+//   get() {
+//     if (this.ok()) {
+//       return this._value;
+//     }
+//     return panic('Result is not ok');
+//   }
+
+//   getErr() {
+//     if (this.err()) {
+//       return this._error;
+//     }
+//     return panic('Result is not err');
+//   }
+// }
+
+function Result<TValue extends Value, TError extends Value>(
+  value: TValue | undefined,
+  error: TError | undefined,
+) {
+  if (value === undefined && error === undefined) {
+    return panic('Result must be either ok or err');
+  }
+  if (value !== undefined && error !== undefined) {
+    return panic('Result cannot be both ok and err');
   }
 
-  isOk() {
-    return this._value !== undefined;
+  if (value !== undefined) {
+    value;
+    return {
+      isOk(): true {
+        return true;
+      },
+      isErr(): false {
+        return false;
+      },
+    };
   }
 
-  isOkAnd(predicate: (value: TValue) => boolean) {
-    return this._value !== undefined && predicate(this._value);
+  if (error !== undefined) {
+    error;
+    return {
+      isOk(): false {
+        return false;
+      },
+      isErr(): true {
+        return true;
+      },
+    };
   }
 
-  isErr() {
-    return this._error !== undefined;
-  }
-
-  isErrAnd(predicate: (error: TError) => boolean) {
-    if (this._error !== undefined) {
-      return predicate(this._error);
-    }
-  }
-
-  ok() {
-    if (this._value !== undefined) {
-      return Some(this._value);
-    }
-    return None<TValue>();
-  }
-
-  err() {
-    if (this._error !== undefined) {
-      return Some(this._error);
-    }
-    return None<TError>();
-  }
-
-  map<TMappedValue extends Value>(map: (value: TValue) => TMappedValue) {
-    if (this._value !== undefined) {
-      return Ok<TMappedValue, TError>(map(this._value));
-    } else if (this._error !== undefined) {
-      return Err<TMappedValue, TError>(this._error);
-    }
-    return unreachable();
-  }
-
-  mapOr<TMappedValue extends Value>(
-    defaultValue: TMappedValue,
-    map: (value: TValue) => TMappedValue,
-  ) {
-    if (this._value !== undefined) {
-      return map(this._value);
-    }
-    return defaultValue;
-  }
-
-  mapOrElse<TMappedValue extends Value>(
-    getDefaultValue: (error: TError) => TMappedValue,
-    map: (value: TValue) => TMappedValue,
-  ) {
-    if (this._value !== undefined) {
-      return map(this._value);
-    } else if (this._error !== undefined) {
-      return getDefaultValue(this._error);
-    }
-    return unreachable();
-  }
-
-  mapErr<TMappedError extends Value>(map: (error: TError) => TMappedError) {
-    if (this._error !== undefined) {
-      return Err<TValue, TMappedError>(map(this._error));
-    } else if (this._value !== undefined) {
-      return Ok<TValue, TMappedError>(this._value);
-    }
-    return unreachable();
-  }
-
-  expect(message: string) {
-    if (this._value !== undefined) {
-      return this._value;
-    }
-    return panic(message);
-  }
-
-  expectErr(message: string) {
-    if (this._error !== undefined) {
-      return this._error;
-    }
-    return panic(message);
-  }
-
-  unwrap() {
-    if (this._value !== undefined) {
-      return this._value;
-    } else if (this._error !== undefined) {
-      panic(
-        (this._error as {}).toString
-          ? (this._error as {}).toString()
-          : undefined,
-      );
-    }
-    return unreachable();
-  }
-
-  unwrapErr() {
-    if (this._error !== undefined) {
-      return this._error;
-    } else if (this._value !== undefined) {
-      panic(
-        (this._value as {}).toString
-          ? (this._value as {}).toString()
-          : undefined,
-      );
-    }
-    return unreachable();
-  }
-
-  and<UValue extends Value>(result: Result<UValue, TError>) {
-    if (this._value !== undefined) {
-      return result;
-    } else if (this._error !== undefined) {
-      return Err<UValue, TError>(this._error);
-    }
-    return unreachable();
-  }
-
-  andThen<UValue extends Value>(op: (value: TValue) => Result<UValue, TError>) {
-    if (this._value !== undefined) {
-      return op(this._value);
-    } else if (this._error !== undefined) {
-      return Err<UValue, TError>(this._error);
-    }
-    return unreachable();
-  }
-
-  or<UError extends Value>(result: Result<TValue, UError>) {
-    if (this._error !== undefined) {
-      return result;
-    } else if (this._value !== undefined) {
-      return Ok<TValue, UError>(this._value);
-    }
-    return unreachable();
-  }
-
-  orElse<UError extends Value>(op: (error: TError) => Result<TValue, UError>) {
-    if (this._error !== undefined) {
-      return op(this._error);
-    } else if (this._value !== undefined) {
-      return Ok<TValue, UError>(this._value);
-    }
-    return unreachable();
-  }
-
-  unwrapOr(defaultValue: TValue) {
-    if (this._value !== undefined) {
-      return this._value;
-    }
-    return defaultValue;
-  }
-
-  unwrapOrElse(getDefaultValue: (error: TError) => TValue) {
-    if (this._value !== undefined) {
-      return this._value;
-    } else if (this._error !== undefined) {
-      return getDefaultValue(this._error);
-    }
-    return unreachable();
-  }
-
-  contains(value: TValue) {
-    return this._value === value;
-  }
-
-  containsErr(error: TError) {
-    return this._error === error;
-  }
+  return unreachable();
 }
 
 export function Ok<TValue extends Value, TError extends Value>(value: TValue) {
-  return new Result<TValue, TError>(value, undefined);
+  // return new Result<TValue, TError>(value, undefined);
+  return Result<TValue, TError>(value, undefined);
 }
 
 export function Err<TValue extends Value, TError extends Value>(error: TError) {
-  return new Result<TValue, TError>(undefined, error);
+  // return new Result<TValue, TError>(undefined, error);
+  return Result<TValue, TError>(undefined, error);
+}
+
+function t() {
+  const r = Ok(1);
+  if (r.isOk()) {
+  }
 }
