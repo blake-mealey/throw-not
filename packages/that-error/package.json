@@ -1,7 +1,12 @@
 {
   "name": "that-error",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Create typed error classes",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/blake-mealey/no-throw.git",
+    "directory": "packages/that-error"
+  },
   "license": "MIT",
   "type": "module",
   "main": "./dist/index.js",
