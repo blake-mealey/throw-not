@@ -1,9 +1,3 @@
-export type Result<T, E extends Error = Error> = T | E;
-
-export function isError(maybeError: unknown): maybeError is Error {
-  return maybeError instanceof Error;
-}
-
 type CodesDef = {
   [code: string]: (...params: any[]) => { message: string; meta: any };
 };

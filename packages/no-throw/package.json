@@ -1,11 +1,11 @@
 {
-  "name": "that-error",
-  "version": "1.0.2",
-  "description": "Create typed error classes",
+  "name": "no-throw",
+  "version": "0.0.1",
+  "description": "Utilities to help with returning errors instead of throwing them",
   "repository": {
     "type": "git",
     "url": "https://github.com/blake-mealey/no-throw.git",
-    "directory": "packages/that-error"
+    "directory": "packages/no-throw"
   },
   "license": "MIT",
   "type": "module",

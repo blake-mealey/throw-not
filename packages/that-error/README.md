@@ -2,6 +2,11 @@
 
 Create typed error classes. Inspired by the [`thiserror`](https://crates.io/crates/thiserror) Rust crate.
 
+Part of the `no-throw` family of packages:
+
+- [`no-throw`](https://npmjs.com/package/no-throw)
+- [`that-error`](https://npmjs.com/package/that-error)
+
 ## Install
 
 ```sh
@@ -14,6 +19,8 @@ yarn install that-error
 
 ```ts
 // api-errors.ts
+import { ApiError, isApiError } from 'that-error';
+
 export const { ApiError, isApiError } = createError('ApiError', {
   bad_request: (message: string) => ({
     message,
@@ -50,7 +57,7 @@ function getCustomer(id: string) {
 try {
   const customer = getCustomer('cus_1234567890');
 } catch (error) {
-  // instanceof will also pass for `error` for both `ApiError` and `Error`
+  // `error instanceof ApiError` and `error instanceof Error` will also be true
   // passing the code here is optional if you just want to check if it is an `ApiError`
   if (isApiError(error, 'not_found')) {
     // `error` will have full types. In this example:
