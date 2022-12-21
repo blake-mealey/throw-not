@@ -43,9 +43,11 @@ Then configure the rules you want to use under the rules section.
 
 <!-- begin auto-generated rules list -->
 
-| Name                               | Description      |
-| :--------------------------------- | :--------------- |
-| [no-throw](docs/rules/no-throw.md) | Disallow `throw` |
+💡 Manually fixable by [editor suggestions](https://eslint.org/docs/developer-guide/working-with-rules#providing-suggestions).
+
+| Name                               | Description      | 💡 |
+| :--------------------------------- | :--------------- | :- |
+| [no-throw](docs/rules/no-throw.md) | Disallow `throw` | 💡 |
 
 <!-- end auto-generated rules list -->
 

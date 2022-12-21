@@ -1,37 +1,46 @@
 # Disallow `throw` (`throw-not/no-throw`)
 
-<!-- end auto-generated rule header -->
+💡 This rule is manually fixable by [editor suggestions](https://eslint.org/docs/developer-guide/working-with-rules#providing-suggestions).
 
-Please describe the origin of the rule here.
+<!-- end auto-generated rule header -->
 
 ## Rule Details
 
-This rule aims to...
+This rule helps to enforce the pattern of returning errors instead of throwing them by disallowing throwing
+errors.
 
 Examples of **incorrect** code for this rule:
 
 ```js
+throw new Error();
+```
 
-// fill me in
+```js
+throw new Error('my error');
+```
 
+```js
+throw 'my error string';
 ```
 
 Examples of **correct** code for this rule:
 
 ```js
-
-// fill me in
-
+return new Error();
 ```
 
-### Options
+```js
+return new Error('my error');
+```
 
-If there are any options, describe them here. Otherwise, delete this section.
+```js
+return 'my error string';
+```
 
 ## When Not To Use It
 
-Give a short description of when it would be appropriate to turn off this rule.
+When you are not following the pattern of returning errors instead of throwing them.
 
 ## Further Reading
 
-If there are other links that describe the issue this rule addresses, please include them here in a bulleted list.
+- https://github.com/blake-mealey/throw-not
