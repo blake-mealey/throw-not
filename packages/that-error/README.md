@@ -2,9 +2,9 @@
 
 Create typed error classes. Inspired by the [`thiserror`](https://crates.io/crates/thiserror) Rust crate.
 
-Part of the `no-throw` family of packages:
+Part of the `throw-not` family of packages:
 
-- [`no-throw`](https://npmjs.com/package/no-throw)
+- [`throw-not`](https://npmjs.com/package/throw-not)
 - [`that-error`](https://npmjs.com/package/that-error)
 
 ## Install

@@ -4,7 +4,7 @@
   "description": "Create typed error classes",
   "repository": {
     "type": "git",
-    "url": "https://github.com/blake-mealey/no-throw.git",
+    "url": "https://github.com/blake-mealey/throw-not.git",
     "directory": "packages/that-error"
   },
   "license": "MIT",

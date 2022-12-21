@@ -1,24 +1,24 @@
-# `no-throw`
+# `throw-not`
 
 Utilites to help writing code using the pattern of returning errors instead of throwing them.
 
-Part of the `no-throw` family of packages:
+Part of the `throw-not` family of packages:
 
-- [`no-throw`](https://npmjs.com/package/no-throw)
+- [`throw-not`](https://npmjs.com/package/throw-not)
 - [`that-error`](https://npmjs.com/package/that-error)
 
 ## Install
 
 ```sh
-npm install no-throw
-pnpm install no-throw
-yarn install no-throw
+npm install throw-not
+pnpm install throw-not
+yarn install throw-not
 ```
 
 ## Example
 
 ```ts
-import { Result, isError } from 'no-throw';
+import { Result, isError } from 'throw-not';
 
 function somethingThatCouldThrow(): Result<string> {
   if (...) {

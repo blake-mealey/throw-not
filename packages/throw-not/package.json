@@ -1,11 +1,11 @@
 {
-  "name": "no-throw",
+  "name": "throw-not",
   "version": "0.0.1",
   "description": "Utilities to help with returning errors instead of throwing them",
   "repository": {
     "type": "git",
-    "url": "https://github.com/blake-mealey/no-throw.git",
-    "directory": "packages/no-throw"
+    "url": "https://github.com/blake-mealey/throw-not.git",
+    "directory": "packages/throw-not"
   },
   "license": "MIT",
   "type": "module",

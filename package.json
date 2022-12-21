@@ -1,5 +1,5 @@
 {
-  "name": "no-throw-workspace",
+  "name": "throw-not-workspace",
   "private": true,
   "workspaces": [
     "packages/*"
